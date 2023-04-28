@@ -1,0 +1,46 @@
+.card-widget__payment-system-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-widget__validation-wrapper {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.card-widget__payment-system-icon {
+  height: 25px;
+  width: 39px;
+  margin-left: 5px;
+  border: 1px solid #e8e8e8;
+  border-radius: 5px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.mir {
+  background-image: url('./cardWidgetIcons/mir.png');
+}
+
+.visa {
+  background-image: url('./cardWidgetIcons/visa.png');
+}
+
+.amex {
+  background-image: url('./cardWidgetIcons/amex.png');
+}
+
+.master {
+  background-image: url('./cardWidgetIcons/master.png');
+}
+
+.diners {
+  background-image: url('./cardWidgetIcons/diners.png');
+}
+
+.jcb {
+  background-image: url('./cardWidgetIcons/jcb.png');
+}
