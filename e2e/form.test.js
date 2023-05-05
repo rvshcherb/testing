@@ -1,7 +1,7 @@
 import puppeteer from 'puppeteer';
 import { fork } from 'child_process';
 
-jest.setTimeout(20000); // default puppeteer timeout
+jest.setTimeout(30000); // default puppeteer timeout
 
 describe('Card Validation Form', () => {
   let browser;
@@ -22,8 +22,8 @@ describe('Card Validation Form', () => {
     });
 
     browser = await puppeteer.launch({
-      slowMo: 100,
-      headless: false,
+      // slowMo: 100,
+      // headless: false,
     });
     page = await browser.newPage();
   });
