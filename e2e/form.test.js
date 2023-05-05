@@ -1,10 +1,26 @@
 import puppeteer from 'puppeteer';
+import { fork } from 'child_process';
+
+jest.setTimeout(20000); // default puppeteer timeout
 
 describe('Card Validation Form', () => {
   let browser;
   let page;
+  let server = null;
+  const baseUrl = 'http://localhost:9000';
 
   beforeEach(async () => {
+    server = fork(`${__dirname}/e2e.server.js`);
+
+    await new Promise((resolve, reject) => {
+      server.on('error', reject);
+      server.on('message', (message) => {
+        if (message === 'ok') {
+          resolve();
+        }
+      });
+    });
+
     browser = await puppeteer.launch({
       slowMo: 100,
       headless: false,
@@ -13,7 +29,7 @@ describe('Card Validation Form', () => {
   });
 
   test('Card number validation is passed', async () => {
-    await page.goto('http://localhost:8084');
+    await page.goto(baseUrl);
 
     const input = await page.$('#card-widget__input');
     const submit = await page.$('#submit');
@@ -28,7 +44,7 @@ describe('Card Validation Form', () => {
   });
 
   test('Card number validation is NOT passed', async () => {
-    await page.goto('http://localhost:8084');
+    await page.goto(baseUrl);
 
     const input = await page.$('#card-widget__input');
     const submit = await page.$('#submit');
@@ -44,5 +60,6 @@ describe('Card Validation Form', () => {
 
   afterEach(async () => {
     await browser.close();
+    server.kill();
   });
 });

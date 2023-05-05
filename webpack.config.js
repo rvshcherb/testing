@@ -1,76 +1,60 @@
-const path = require('path'); 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path');
+const webpack = require('webpack');
+const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-let mode = process.env.NODE_ENV;
-
 module.exports = {
-  mode: mode,
-	output: {
-    filename: '[name].[contenthash].js',
-    assetModuleFilename: 'assets/[hash][ext][query]',
-		clean: true,
-	}, 
-	devtool: 'source-map',
-	plugins: [
-    new MiniCssExtractPlugin({
-      filename: '[name].[contenthash].css',
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, 'public', 'index.html'),
-    }),
-  ],
-	module: {
-		rules: [
+  target: 'web',
+  devtool: 'inline-source-map',
+  mode: 'development',
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+  },
+  devServer: {
+    historyApiFallback: true,
+    contentBase: path.resolve(__dirname, '/dist'),
+    open: true,
+    compress: true,
+    port: 9000,
+  },
+  module: {
+    rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
-        use: [
-          (mode === 'development') ? 'style-loader' : MiniCssExtractPlugin.loader,
-          'css-loader',
-          {
-            loader: 'postcss-loader',
-            options: {
-              postcssOptions: {
-                plugins: [
-                  [
-                    'postcss-preset-env',
-                    {
-                    // options
-                    },
-                  ],
-                ],
-              },
-            },
-          },
-        ],
-      },
-      { 
-        test: /\.(png|svg|jpg|jpeg|gif)$/i, 
-        type: 'asset/resource',
-      },
-      { 
-        test: /\.(woff|woff2|eot|ttf|otf)$/i,
-        type: 'asset/resource',
-      },
-      {
-        test: /\.html$/i,
-        loader: "html-loader",
-      },
-      {
-        test: /\.m?js$/,
+        test: /\.js$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
         },
       },
+      {
+        test: /\.html$/,
+        use: [
+          {
+            loader: 'html-loader',
+          },
+        ],
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader, 'css-loader',
+        ],
+      },
+      {
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/resource',
+      },
     ],
-	},
-  devServer: {
-    port: 8084,
-    watchFiles: path.join(__dirname, 'src'),
-    hot: true,
   },
-}
+  plugins: [
+    new HtmlWebPackPlugin({
+      template: './src/index.html',
+      filename: './index.html',
+    }),
+    new MiniCssExtractPlugin({
+      filename: '[name].css',
+      chunkFilename: '[id].css',
+    }),
+    new webpack.HotModuleReplacementPlugin(),
+  ],
+};
