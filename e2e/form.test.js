@@ -9,7 +9,7 @@ describe('Card Validation Form', () => {
   let server = null;
   const baseUrl = 'http://localhost:9000';
 
-  beforeEach(async () => {
+  beforeAll(async () => {
     server = fork(`${__dirname}/e2e.server.js`);
 
     await new Promise((resolve, reject) => {
@@ -58,7 +58,7 @@ describe('Card Validation Form', () => {
     expect(result).toBe('Нет');
   });
 
-  afterEach(async () => {
+  afterAll(async () => {
     await browser.close();
     server.kill();
   });
